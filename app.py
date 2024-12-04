@@ -42,6 +42,7 @@ def main():
             st.warning("Por favor, faça o upload do arquivo Swagger no menu 'Upload Swagger' antes de continuar.")
         else:
             with st.form("code_generation_form"):
+                dup = st.text_input("Código da DUP", "520")
                 method = st.selectbox("Method", "POST")
                 resource = st.text_input("Resource (Path da API)", "/registradora/solicitacao-informe-agente-financiador")
                 controller_name = st.text_input("Controller Name", "FinanciadorController")
@@ -92,7 +93,7 @@ def main():
                     # TODO: Gerar Migrations Baseado nos scripts de exemplos e nomes da DUP
 
                     obj_request = {
-                        "migration": {"nome": "520"},
+                        "migration": {"nome": dup},
                         "header": parameters,
                         "parametros": {
                             "controller": controller_name,
@@ -108,8 +109,6 @@ def main():
                         "request": request,
                         "response": responses_object
                     }
-
-                    print(json.dumps(obj_request, indent=2))
 
                     payload = executor.execute_quick_command("spring_validator", str(obj_request))
                     swagger = executor.extract_code(payload, 0, 'java')
