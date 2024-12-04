@@ -4,9 +4,17 @@ import yaml
 
 
 class SwaggerJsonGenerator:
-    def __init__(self, swagger_file_path: str):
+    def load_swagger_file(self, swagger_file_path: str):
         with open(swagger_file_path) as file:
             self.swagger_spec = yaml.safe_load(file)
+        self.components = self.swagger_spec.get('components', {})
+        self.schemas = self.components.get('schemas', {})
+        self.parameters = self.components.get('parameters', {})
+        self.responses = self.components.get('responses', {})
+        self.paths = self.swagger_spec.get('paths', {})
+
+    def load_swagger(self, file):
+        self.swagger_spec = yaml.safe_load(file)
         self.components = self.swagger_spec.get('components', {})
         self.schemas = self.components.get('schemas', {})
         self.parameters = self.components.get('parameters', {})
