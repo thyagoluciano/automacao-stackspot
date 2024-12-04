@@ -95,15 +95,15 @@ def main():
                         "migration": {"nome": "520"},
                         "header": parameters,
                         "parametros": {
-                            "controller": "CreateInformeAgenteFinanciadorController",
-                            "request_body": "CreateInformeAgenteFinanciadorRequest",
-                            "response_body": "CreateInformeAgenteFinanciadorResponse",
+                            "controller": controller_name,
+                            "request_body": request_name,
+                            "response_body": response_name,
                             "http_verb": "POST",
                             "request_mapping": resource,
-                            "tags": "solicitacao-informe-agente-financiador",
-                            "operationId": "solicitacao-informe-agente-financiador",
-                            "summary": "DUP515, Solicitacao de Informe de Agente Financiador.",
-                            "description": "DUP0520, Assíncrono, resultado por polling /registradora/solicitacao-informe-agente-financiador"
+                            "tags": tags,
+                            "operationId": operation_id,
+                            "summary": summary,
+                            "description": description
                         },
                         "request": request,
                         "response": responses_object
