@@ -7,6 +7,10 @@ from quick_command_executor import QuickCommandExecutor
 
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 def save_code_file(path, content):
     try:
@@ -52,7 +56,7 @@ def save_file(path, content: any):
 
 
 if __name__ == "__main__":
-    repo_url = "https://github.com/NucleaSA/dup-api"
+    repo_url = os.getenv('REPO_URL')
     tag = "v1.12.0"
     output_dir = "/Users/thyagoluciano/Developer/zup/nuclea/automacao-stackspot/tmp"
     swagger_file = 'dup-swagger.yaml'
@@ -64,7 +68,8 @@ if __name__ == "__main__":
     method = 'POST'
     resource = "/registradora/solicitacao-informe-agente-financiador"
 
-    swagger_json_generator = swagger_json_generator.SwaggerJsonGenerator(swagger_path)
+    swagger_json_generator = swagger_json_generator.SwaggerJsonGenerator()
+    swagger_json_generator.load_swagger_file(swagger_path)
 
     method_obj = swagger_json_generator.get_resource_properties(resource, method)
 

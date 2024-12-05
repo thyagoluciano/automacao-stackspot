@@ -1,4 +1,5 @@
 import json
+import os
 import time
 import requests
 
@@ -6,7 +7,7 @@ import requests
 class RemoteQuickCommandClient:
 
     def __init__(self, client_id, client_secret, realm, quick_command) -> None:
-        self._BASE_URL = "https://genai-code-buddy-api.stackspot.com/v1/quick-commands"
+        self._BASE_URL = os.getenv('SS_BASE_URL')
         self._EXECUTION_URI = "/create-execution/"
         self._CALLBACK_URI = "/callback/"
         self._quick_command = quick_command

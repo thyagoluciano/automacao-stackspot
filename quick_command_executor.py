@@ -1,14 +1,11 @@
 import os
 import re
 
-from dotenv import load_dotenv
-
 from reemote_quick_command_client import RemoteQuickCommandClient
 
 
 class QuickCommandExecutor:
     def __init__(self):
-        load_dotenv()
         self.client_id = os.getenv('SS_CLIENT_ID')
         self.client_secret = os.getenv('SS_CLIENT_SECRET')
         self.realm = os.getenv('SS_REALM')

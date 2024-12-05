@@ -7,14 +7,16 @@ import yaml
 from quick_command_executor import QuickCommandExecutor
 from swagger_json_generator import SwaggerJsonGenerator
 
+from dotenv import load_dotenv
 
-# Configuração do menu
+load_dotenv()
+
+
 def main():
-    # Configuração da página para layout mais largo
     st.set_page_config(
         page_title="Formulário Swagger",
-        layout="wide",  # Define o layout como "wide" para ocupar mais espaço
-        initial_sidebar_state="expanded"  # Expande a barra lateral por padrão (opcional)
+        layout="wide",
+        initial_sidebar_state="expanded"
     )
 
     if "page" not in st.session_state:
@@ -33,7 +35,7 @@ def main():
         if swagger_file:
             st.success("Arquivo carregado com sucesso!")
             st.session_state["swagger_file"] = swagger_file
-            st.button("Ir para o formulário", on_click=go_to_form)  # Botão para mudar de página
+            st.button("Ir para o formulário", on_click=go_to_form)
 
     elif st.session_state["page"] == "form":
 
