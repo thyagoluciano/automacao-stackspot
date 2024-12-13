@@ -1,4 +1,5 @@
 import os
+import re
 
 
 def generate_feature(dup_number, feature_name, h1_resource, h2_resource):
@@ -71,10 +72,10 @@ def display_output_as_markdown(output_path):
     try:
         for root, _, files in os.walk(output_path):
             for file_name in files:
-                if file_name.endswith(".java") or file_name.endswith(".md"):
+                if file_name.endswith(".java") or file_name.endswith(".md") or file_name.endswith(".sql"):
                     file_path = os.path.join(root, file_name)
                     try:
-                        with open(file_path, 'r') as file:
+                        with open(file_path) as file:
                             content = file.read()
 
                             relative_path = os.path.relpath(file_path, output_path)
@@ -83,6 +84,8 @@ def display_output_as_markdown(output_path):
 
                             if file_name.endswith(".java"):
                                 markdown_text += f"```java\n{content}\n```\n\n"
+                            elif file_name.endswith(".sql"):
+                                markdown_text += f"```sql\n{content}\n```\n\n"
                             else:
                                 markdown_text += f"{content}\n\n"
                     except Exception as e:
@@ -91,5 +94,30 @@ def display_output_as_markdown(output_path):
         markdown_text += f"Erro: A pasta '{output_path}' não foi encontrada.\n\n"
 
     return markdown_text
+
+
+def converter_and_save(code, output_dir):
+    try:
+        match = re.search(r'public class (\w+)', code)
+        if not match:
+            print("Não foi possível encontrar o nome da classe no código Java. Ignorando...")
+            return
+
+        new_class_name = "Create#{feature_name_pascal}Request"
+        new_file_name = "Create#{feature_name_pascal}Request.java"
+
+        new_code = re.sub(r'public class \w+', f'public class {new_class_name}', code)
+
+        os.makedirs(output_dir, exist_ok=True)
+
+        output_file_path = os.path.join(output_dir, new_file_name)
+
+        with open(output_file_path, 'w', encoding='utf-8') as output_file:
+            output_file.write(new_code)
+
+        print(f"Código Java atualizado e salvo em: {output_file_path}")
+
+    except Exception as e:
+        print(f"Erro ao processar o código Java: {e}")
 
 

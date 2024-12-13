@@ -1,8 +1,5 @@
 --liquibase formatted sql
-
---changeset F002464:1 labels:0.0.5.24
---preconditions onFail:CONTINUE onError:CONTINUE
---comment Script para criação das tabelas da nova arquitetura (dup_517_evt)
+--comment Script para criação das tabelas da nova arquitetura (dup_006_evt)
 
 SET SEARCH_PATH = dup_canal_api;
 
@@ -23,11 +20,8 @@ CREATE TABLE IF NOT EXISTS dup_006_evt (
     CONSTRAINT pk_dup_006_evt_id PRIMARY KEY (id)
 );
 
--- rollback drop table dup_canal_api.dup_517_evt;
-
---changeset F002464:2 labels:0.0.5.24
---preconditions onFail:CONTINUE onError:CONTINUE
---comment Script para criação das tabelas da nova arquitetura (dup_517_op)
+-- rollback drop table dup_canal_api.dup_006_evt;
+--comment Script para criação das tabelas da nova arquitetura (dup_006_op)
 
 SET SEARCH_PATH = dup_canal_api;
 
@@ -41,4 +35,4 @@ CREATE TABLE IF NOT EXISTS dup_006_op (
     CONSTRAINT pk_dup_006_op_id PRIMARY KEY (id_op)
 );
 
--- rollback drop table dup_canal_api.dup_517_op;
+-- rollback drop table dup_canal_api.dup_006_op;

@@ -3,7 +3,7 @@ import os
 
 import streamlit as st
 
-from code_2_code import generate_feature, display_output_as_markdown
+from code_2_code import generate_feature, display_output_as_markdown, converter_and_save
 from quick_command_executor import QuickCommandExecutor
 from swagger_json_generator import SwaggerJsonGenerator
 
@@ -78,9 +78,6 @@ def main():
                     print(json.dumps(responses_object, indent=2))
                     # save_file(f'{output_dir}/code/response.json', responses_object)
 
-                    # {payload_fields}
-                    generate_feature(dup, feature_name, resource, f"{resource}/retorno")
-
                     executor = QuickCommandExecutor()
                     executor.add_quick_command("spring_validator", os.getenv('SS_SPRING_VALIDATOR_AGENT'))
 
@@ -96,9 +93,11 @@ def main():
                     }
 
                     payload = executor.execute_quick_command("spring_validator", str(obj_request))
-                    swagger = executor.extract_code(payload, 0, 'java')
                     validator = executor.extract_code(payload, 1, 'java')
-                    migration = executor.extract_code(payload, 2, 'sql')
+
+                    converter_and_save(validator[0], "./templates/application/#{feature_name_lower}/request/")
+
+                    generate_feature(dup, feature_name, resource, f"{resource}/retorno")
 
                     # print(swagger)
                     # save_code_file(f'{output_dir}/code/interface.java', swagger)
@@ -106,8 +105,8 @@ def main():
                     # st.code("\n".join(swagger), language="java")
                     # print(validator)
                     # save_code_file(f'{output_dir}/code/validator.java', validator)
-                    st.title("Classe de Validação")
-                    st.code("\n".join(validator), language="java")
+                    # st.title("Classe de Validação")
+                    # st.code("\n".join(validator), language="java")
                     # print(migration)
                     # save_code_file(f'{output_dir}/code/migrations.sql', migration)
                     # st.title("Script SQL de Migration")
