@@ -2,8 +2,8 @@ import json
 import os
 
 import streamlit as st
-import yaml
 
+from code_2_code import generate_feature, display_output_as_markdown
 from quick_command_executor import QuickCommandExecutor
 from swagger_json_generator import SwaggerJsonGenerator
 
@@ -44,16 +44,10 @@ def main():
             st.warning("Por favor, faça o upload do arquivo Swagger no menu 'Upload Swagger' antes de continuar.")
         else:
             with st.form("code_generation_form"):
-                dup = st.text_input("Código da DUP", "520")
+                dup = st.selectbox("Dup", "006")
                 method = st.selectbox("Method", "POST")
-                resource = st.text_input("Resource (Path da API)", "/registradora/solicitacao-informe-agente-financiador")
-                controller_name = st.text_input("Controller Name", "FinanciadorController")
-                request_name = st.text_input("Request Name", "FinanciadorRequest")
-                response_name = st.text_input("Response Name", "FinanciadorResponse")
-                tags = st.text_input("Tags", "Financiador")
-                operation_id = st.text_input("Operation ID", "FinanciadorID")
-                summary = st.text_input("Summary", "Financiador Summary")
-                description = st.text_area("Description", "Financiador Description")
+                feature_name = st.text_input("Feature Name", "BloqueioDesbloqueioDuplicata")
+                resource = st.text_input("Resource (Path da API)", "/escrituradora/duplicata/bloquear-desbloquear")
                 submitted = st.form_submit_button("Gerar Código")
 
                 if submitted:
@@ -63,10 +57,7 @@ def main():
 
                     method_obj = swagger_json_generator.get_resource_properties(resource, method)
 
-                    # Recupera o objeto header do recurso com as propriedades e se são obrigatorios
                     parameters = swagger_json_generator.build_parameters(method_obj['parameters'])
-
-                    # Recuperar o objeto de request com um payload de exemplo e um payload de definição de obrigatoriedade
                     request_body = swagger_json_generator.build_request(method_obj['requestBody'])
                     request = swagger_json_generator.resolve_refs(request_body)
 
@@ -76,37 +67,29 @@ def main():
                     for response in response_body:
                         responses_object[response] = swagger_json_generator.generate_request(response_body[response])
 
-                    # Regras e propriedades do Header
                     print(json.dumps(parameters, indent=4))
                     # save_file(f'{output_dir}/code/header.json', parameters)
-                    # Objeto com todas as propriedades, quais são obrigatorias, e quais as regras
+
                     print(json.dumps(request, indent=2))
                     # save_file(f'{output_dir}/code/request.json', request)
-                    # Imprime um exemplo de objeto de request
+
                     print(json.dumps(swagger_json_generator.generate_request(request), indent=4))
-                    # Imprime o objeto de response
+
                     print(json.dumps(responses_object, indent=2))
                     # save_file(f'{output_dir}/code/response.json', responses_object)
 
+                    # {payload_fields}
+                    generate_feature(dup, feature_name, resource, f"{resource}/retorno")
+
                     executor = QuickCommandExecutor()
                     executor.add_quick_command("spring_validator", os.getenv('SS_SPRING_VALIDATOR_AGENT'))
-                    # TODO: Gerar Interface de documentação do Swagger baseado no Header, Request, Response
-                    # TODO: Gerar Classe de Validação baseado no objeto de Request usando o payload de definição de obrigatoriedade
-                    # TODO: Gerar Migrations Baseado nos scripts de exemplos e nomes da DUP
 
                     obj_request = {
                         "migration": {"nome": dup},
                         "header": parameters,
                         "parametros": {
-                            "controller": controller_name,
-                            "request_body": request_name,
-                            "response_body": response_name,
                             "http_verb": "POST",
                             "request_mapping": resource,
-                            "tags": tags,
-                            "operationId": operation_id,
-                            "summary": summary,
-                            "description": description
                         },
                         "request": request,
                         "response": responses_object
@@ -119,33 +102,25 @@ def main():
 
                     # print(swagger)
                     # save_code_file(f'{output_dir}/code/interface.java', swagger)
-                    st.title("Interface de Documentação")
-                    st.code("\n".join(swagger), language="java")
+                    # st.title("Interface de Documentação")
+                    # st.code("\n".join(swagger), language="java")
                     # print(validator)
                     # save_code_file(f'{output_dir}/code/validator.java', validator)
                     st.title("Classe de Validação")
                     st.code("\n".join(validator), language="java")
                     # print(migration)
                     # save_code_file(f'{output_dir}/code/migrations.sql', migration)
-                    st.title("Script SQL de Migration")
-                    st.code("\n".join(migration), language="java")
+                    # st.title("Script SQL de Migration")
+                    # st.code("\n".join(migration), language="java")
+                    code = display_output_as_markdown("./output")
+                    st.title("Funcionalidade")
+                    st.write(code)
 
                     st.subheader("Resultado do Processamento do Swagger")
-                    # if isinstance(resource_data, dict):
-                    #     st.json(resource_data)
-                    # else:
-                    #     st.error(resource_data)
 
                     st.subheader("Inputs Fornecidos")
                     st.write(f"**Method:** {method}")
                     st.write(f"**Resource:** {resource}")
-                    st.write(f"**Controller Name:** {controller_name}")
-                    st.write(f"**Request Name:** {request_name}")
-                    st.write(f"**Response Name:** {response_name}")
-                    st.write(f"**Tags:** {tags}")
-                    st.write(f"**Operation ID:** {operation_id}")
-                    st.write(f"**Summary:** {summary}")
-                    st.write(f"**Description:** {description}")
 
                     st.success("Código gerado com sucesso (simulado).")
 

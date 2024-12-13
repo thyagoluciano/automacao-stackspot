@@ -1,0 +1,15 @@
+{
+    "nomeFuncionalidade": "BloqueiDesbloqueioDuplicata",
+    "nomeTabelaOperacoes": "006_op",
+    "nomeTabelaEventos": "006_evt",
+    "payload": {
+        "codigoIdentificacao": {
+            "tipo": "String",
+            "validacoes": ["@Pattern(regexp = '^[a-zA-Z0-9]{20}$')"]
+        },
+         "valor": {
+            "tipo": "int",
+            "validacoes": ["@Min(1)", "@Max(100)"]
+         }
+    }
+}

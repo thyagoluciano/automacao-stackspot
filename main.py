@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     swagger_path = f'{output_dir}/{swagger_file}'
     method = 'POST'
-    resource = "/registradora/solicitacao-informe-agente-financiador"
+    resource = "/escrituradora/duplicata/bloquear-desbloquear"
 
     swagger_json_generator = swagger_json_generator.SwaggerJsonGenerator()
     swagger_json_generator.load_swagger_file(swagger_path)
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # TODO: Gerar Migrations Baseado nos scripts de exemplos e nomes da DUP
 
     obj_request = {
-      "migration": {"nome": "520"},
+      "migration": {"nome": "006"},
       "header": parameters,
       "parametros": {
         "controller": "CreateInformeAgenteFinanciadorController",
