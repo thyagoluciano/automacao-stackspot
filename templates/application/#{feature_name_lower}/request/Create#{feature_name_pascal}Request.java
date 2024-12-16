@@ -1,3 +1,5 @@
+package br.com.nuclea.canal.participante.dupcanalparticipanteapi.request;
+
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -5,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Classe que representa o payload de requisição para o endpoint de bloqueio/desbloqueio de duplicatas.
+ * Classe que representa o payload de requisição para bloquear ou desbloquear duplicatas.
  */
 @Getter
 @Setter
@@ -15,7 +17,7 @@ public class Create#{feature_name_pascal}Request {
 
     /**
      * Tipo de Pessoa do Sacador.
-     * Valores permitidos: "F" (Física) ou "J" (Jurídica).
+     * Valores permitidos: "F" (Física), "J" (Jurídica).
      */
     @NotNull(message = "O campo 'tipoPessoaSacador' é obrigatório.")
     @Pattern(regexp = "F|J", message = "O campo 'tipoPessoaSacador' deve ser 'F' ou 'J'.")
@@ -23,7 +25,7 @@ public class Create#{feature_name_pascal}Request {
 
     /**
      * CPF ou CNPJ do Sacador.
-     * Deve conter apenas números, com tamanho entre 11 e 14 caracteres.
+     * Deve conter entre 11 e 14 caracteres numéricos.
      */
     @NotNull(message = "O campo 'cpfOuCnpjSacador' é obrigatório.")
     @Pattern(regexp = "^[0-9]*[1-9]+0*$", message = "O campo 'cpfOuCnpjSacador' deve conter apenas números válidos.")
@@ -32,7 +34,7 @@ public class Create#{feature_name_pascal}Request {
 
     /**
      * Ação de Bloqueio ou Desbloqueio.
-     * Valores permitidos: "B" (Bloqueio) ou "D" (Desbloqueio).
+     * Valores permitidos: "B" (Bloqueio), "D" (Desbloqueio).
      */
     @NotNull(message = "O campo 'acaoBloqueioOuDesbloqueio' é obrigatório.")
     @Pattern(regexp = "B|D", message = "O campo 'acaoBloqueioOuDesbloqueio' deve ser 'B' ou 'D'.")
@@ -48,7 +50,7 @@ public class Create#{feature_name_pascal}Request {
 
     /**
      * Descrição do Motivo de Bloqueio ou Desbloqueio.
-     * Tamanho máximo: 80 caracteres.
+     * Opcional, com no máximo 80 caracteres.
      */
     @Size(max = 80, message = "O campo 'descricaoMotivoBloqueioOuDesbloqueio' deve ter no máximo 80 caracteres.")
     private String descricaoMotivoBloqueioOuDesbloqueio;

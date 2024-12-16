@@ -1,8 +1,7 @@
 import os
 import re
 
-
-def generate_feature(dup_number, feature_name, h1_resource, h2_resource):
+def generate_feature(dup_number, feature_name, h1_resource, h2_resource, output_base_path):
     feature_name_lower = feature_name.lower()
     feature_name_pascal = ''.join(word.capitalize() for word in feature_name.split('-'))
     feature_name_kebab = feature_name_lower.replace("_", "-")
@@ -19,11 +18,8 @@ def generate_feature(dup_number, feature_name, h1_resource, h2_resource):
         "#{query_resource_feature_name_kebab}": h2_resource,
     }
 
-    # Caminho para a pasta de templates
-    templates_base_path = "./templates"
-    output_base_path = "./output"
-
-    # Lista os arquivos na pasta de templates
+    templates_base_path = os.path.join(os.path.dirname(__file__), "templates") # Garante que o path do template seja encontrado
+   # Lista os arquivos na pasta de templates
     for root, _, files in os.walk(templates_base_path):
         for file_name in files:
             if file_name.endswith(".java") or file_name.endswith(".md") or file_name.endswith(".sql"):
@@ -77,11 +73,8 @@ def display_output_as_markdown(output_path):
                     try:
                         with open(file_path) as file:
                             content = file.read()
-
                             relative_path = os.path.relpath(file_path, output_path)
-
                             markdown_text += f"### {relative_path}\n\n"
-
                             if file_name.endswith(".java"):
                                 markdown_text += f"```java\n{content}\n```\n\n"
                             elif file_name.endswith(".sql"):
@@ -92,9 +85,7 @@ def display_output_as_markdown(output_path):
                         markdown_text += f"Erro ao ler o arquivo {file_path}: {e}\n\n"
     except FileNotFoundError:
         markdown_text += f"Erro: A pasta '{output_path}' não foi encontrada.\n\n"
-
     return markdown_text
-
 
 def converter_and_save(code, output_dir):
     try:
@@ -119,5 +110,3 @@ def converter_and_save(code, output_dir):
 
     except Exception as e:
         print(f"Erro ao processar o código Java: {e}")
-
-
