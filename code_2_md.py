@@ -50,4 +50,4 @@ def directory_to_markdown(directory_path):
 
 # Exemplo de uso
 if __name__ == "__main__":
-    directory_to_markdown("/Users/thyagoluciano/Developer/projetos/saasyfy/leadzap/src")
+    directory_to_markdown("/Users/thyagoluciano/Developer/zup/nuclea/automacao-stackspot/templates")
